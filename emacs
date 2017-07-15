@@ -141,6 +141,14 @@ Return a list of installed packages or nil for every skipped package."
         ("riot" . "\\.riot\\'"))
       )
 
+;; web-mode jsx
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode ))
+(defadvice web-mode-highlight-part (around tweat-jsx activate)
+  (if (equal web-mode-content-type "jsx")
+      (let ((web-mode-enable-part-face nil))
+        ad-do-it)
+    ad-do-it))
+
 ;; smart-mode-line
 (sml/setup)
 (sml/apply-theme 'respectful)
