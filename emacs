@@ -8,9 +8,12 @@
       initial-scratch-message nil)
 
 ;; general global things
-(tool-bar-mode -1)
+(if window-system
+    (progn
+      (tool-bar-mode -1)
+      (scroll-bar-mode -1)))
+
 (menu-bar-mode -1)
-(scroll-bar-mode -1)
 (display-time-mode 1)
 (delete-selection-mode 1)
 
