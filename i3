@@ -21,8 +21,8 @@ bindsym $mod+Shift+x exec slock
 # hibernate
 bindsym $mod+Shift+Control+x exec "sudo pm-suspend | slock"
 
-# start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run -fn 'InputSans Light-8'
+# start rofi
+bindsym $mod+d exec "rofi -combi-modi window,drun,run -show combi -modi combi"
 
 # change focus
 bindsym $mod+j focus left
