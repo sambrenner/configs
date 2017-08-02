@@ -111,7 +111,7 @@ assign [class="Emacs25"] $workspace1
 assign [class="Xfce4-terminal"] $workspace2
 assign [class="Firefox"] $workspace3
 assign [class="Google-chrome"] $workspace4
-assign [class="robomongo"] $workspace5
+assign [class="robo3t"] $workspace5
 assign [class="Google Play Music Desktop Player"] $workspace10
 for_window [class="Spotify"] move window to workspace $workspace10
 
@@ -213,4 +213,4 @@ exec i3-sensible-terminal
 exec google-chrome
 exec firefox
 exec google-play-music-desktop-player
-exec /usr/local/bin/robomongo/bin/robomongo
+exec /opt/robo3t/bin/robo3t
