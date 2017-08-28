@@ -128,6 +128,7 @@ Return a list of installed packages or nil for every skipped package."
 (add-hook 'web-mode-hook  'my-web-mode-hook)
 
 (add-to-list 'auto-mode-alist '("\\.txt\\'" . web-mode ))
+(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode ))
 (add-to-list 'auto-mode-alist '("\\.ejs\\'" . web-mode ))
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode ))
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode ))
