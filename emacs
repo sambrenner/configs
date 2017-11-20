@@ -109,6 +109,7 @@ Return a list of installed packages or nil for every skipped package."
 ;; js2-mode
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (setq js2-basic-offset 4)
+(setq js2-strict-inconsistent-return-warning nil)
 (setq js2-indent-switch-body t)
 (setq js-switch-indent-offset 4)
 
