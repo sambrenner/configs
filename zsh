@@ -8,7 +8,6 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
-alias startday="ssh-add && sudo service mongod start && sudo service redis start"
 alias rezsh="source ~/.zshrc"
 alias xr="xrdb ~/.Xresources"
 
