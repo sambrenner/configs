@@ -31,10 +31,6 @@
 (setq next-line-add-newlines t)
 
 (custom-set-variables
- '(markdown-command "/usr/bin/pandoc -c /home/sam/.emacs.d/github-pandoc.css --from markdown_github -t html5 --mathjax --highlight-style pygments --standalone"))
-
-;; custom vars
-(custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
@@ -42,10 +38,15 @@
  '(custom-safe-themes
    (quote
     ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "a802c77b818597cc90e10d56e5b66945c57776f036482a033866f5f506257bca" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "8288b9b453cdd2398339a9fd0cec94105bc5ca79b86695bd7bf0381b1fbe8147" default)))
+ '(markdown-command
+   "/usr/bin/pandoc -c /home/sam/.emacs.d/github-pandoc.css --from markdown_github -t html5 --mathjax --highlight-style pygments --standalone")
  '(package-selected-packages
    (quote
-    (yaml-mode web-mode web-beautify transpose-frame smyx-theme smarty-mode smart-mode-line scss-mode powerline php-auto-yasnippets multi-term markdown-toc magit js2-mode jade-mode helm-company helm-ag glsl-mode buffer-move apache-mode actionscript-mode)))
+    (company-tern yaml-mode web-mode web-beautify transpose-frame smyx-theme smarty-mode smart-mode-line scss-mode powerline php-auto-yasnippets multi-term markdown-toc magit js2-mode helm-company helm-ag glsl-mode buffer-move apache-mode actionscript-mode)))
  '(safe-local-variable-values (quote ((eval setq web-mode-set-engine "ctemplate")))))
+
+;; custom vars
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -79,12 +80,11 @@ Return a list of installed packages or nil for every skipped package."
 (or (file-exists-p package-user-dir)
 	(package-refresh-contents))
 
-(ensure-package-installed 'magit 'smyx-theme 'smarty-mode 'php-mode 'company 'markdown-mode 'markdown-toc 'apache-mode 'helm 'helm-company 'web-mode 'yasnippet 'php-auto-yasnippets 'glsl-mode 'actionscript-mode 'scss-mode 'jade-mode 'multi-term 'smart-mode-line 'js2-mode 'helm-ag 'web-beautify 'yaml-mode 'transpose-frame 'buffer-move)
+(ensure-package-installed 'magit 'smyx-theme 'smarty-mode 'php-mode 'company 'company-tern 'markdown-mode 'markdown-toc 'apache-mode 'helm 'helm-company 'web-mode 'yasnippet 'php-auto-yasnippets 'glsl-mode 'actionscript-mode 'scss-mode 'multi-term 'smart-mode-line 'js2-mode 'helm-ag 'web-beautify 'yaml-mode 'transpose-frame 'buffer-move 'tern 'exec-path-from-shell 'amd-mode 'eslintd-fix 'flycheck 'gulp-task-runner 'indium 'js2-mode 'js2-refactor 'projectile 'xref-js2)
 
-;; frames-only-mode
-;; (require 'frames-only-mode)
-;; (frames-only-mode)
-;; (server-start)
+;; path from shell
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 
 ;; shell
 (require 'multi-term)
@@ -106,20 +106,120 @@ Return a list of installed packages or nil for every skipped package."
 (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
 (add-to-list 'auto-mode-alist '("\\.geom\\'" . glsl-mode))
 
-;; js2-mode
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(setq js2-basic-offset 4)
-(setq js2-strict-inconsistent-return-warning nil)
-(setq js2-indent-switch-body t)
-(setq js-switch-indent-offset 4)
+;;; emacs-js.el --- JS-mode setup
+;; Copyright (C) 2016  Nicolas Petton
+;; Author: Nicolas Petton <nicolas@petton.fr>
 
-;; jade-mode
-(add-to-list 'auto-mode-alist '("\\.pug\\'" . jade-mode ))
+(require 'js2-mode)
+(require 'js2-refactor)
+(require 'amd-mode)
+(require 'eslintd-fix)
+(require 'tern)
+(require 'gulp-task-runner)
+(require 'company)
+(require 'company-tern)
+(require 'helm-company)
+(require 'flycheck)
+(require 'xref-js2)
+(require 'yasnippet)
+(require 'indium)
+
+(if (executable-find "eslint_d")
+    (setq flycheck-javascript-eslint-executable "eslint_d")
+  (warn "emacs-js: You might want to install eslint_d: sudo npm install -g eslint_d."))
+
+(add-hook 'js-mode-hook #'setup-js-buffer)
+
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+
+(defun setup-js-buffer ()
+  (unless (eq major-mode 'json-mode)
+    (company-mode 1)
+    (tern-mode 1)
+    ;; When the buffer is not visiting a file, eslint systematically fails
+    (if buffer-file-name
+	(flycheck-mode 1)
+      (flycheck-mode -1))
+    (js2-minor-mode 1)
+    (js2-refactor-mode 1)
+    (js2-imenu-extras-mode)
+    (indium-interaction-mode 1)
+    (amd-mode 1))
+
+  ;; add eslintd-fix support
+  (eslintd-fix-mode)
+
+  ;; add xref-js2 support
+  (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)
+
+  (setq js2-basic-offset 4)
+  (setq js2-strict-inconsistent-return-warning nil)
+  (setq js2-indent-switch-body t)
+  (setq js-switch-indent-offset 4)
+
+  (setq js2-global-externs '("define" "require" "app"))
+  (setq js2-include-node-externs t)
+  (setq js2-pretty-multiline-declarations nil)
+
+  (yas-minor-mode +1)
+
+  (set (make-local-variable 'company-dabbrev-ignore-case) nil)
+  (set (make-local-variable 'company-dabbrev-downcase) nil))
+
+;; Also ignore some other files
+(dolist (file '("require.js" "highcharts.js" "highcharts.src.js" "bootstrap.js" "Gruntfile.js" "moment.js" "moment-with-locales.js"))
+  (add-to-list 'xref-js2-ignored-files file))
+
+;; tern will override js2r keybindings...
+(define-key tern-mode-keymap (kbd "C-c C-r") nil)
+
+;; ... and xref.
+(define-key tern-mode-keymap (kbd "M-.") nil)
+(define-key tern-mode-keymap (kbd "M-,") nil)
+
+(js2r-add-keybindings-with-prefix "C-c C-r")
+(setq js2r-always-insert-parens-around-arrow-function-params t)
+(setq js2r-prefer-let-over-var t)
+
+(define-key js-mode-map (kbd "M-.") nil)
+(define-key js-mode-map (kbd "C-c C-j") nil)
+
+(define-key amd-mode-map (kbd "C-c C-a") #'amd-initialize-makey-group)
+(setq amd-use-relative-file-name t)
+
+;; eslint parser executable can be overridden in some projects but marked as
+;; risky, so silence that.
+(put 'flycheck-javascript-eslint-executable 'risky-local-variable nil)
+
+(defun kill-tern-process ()
+  "Kill the tern process if any.
+The process will be restarted.  This is useful if tern becomes
+unreachable."
+  (interactive)
+  (delete-process "Tern"))
+
+(eval-after-load 'company '(add-to-list 'company-backends 'company-tern))
+
+;; paredit-like commands for JS
+(define-key js-mode-map (kbd "<C-right>") #'js2r-forward-slurp)
+(define-key js-mode-map (kbd "<C-left>") #'js2r-forward-barf)
+(define-key js-mode-map (kbd "C-k") #'js2r-kill)
+(define-key js-mode-map (kbd "M-S") #'js-smart-split)
+
+;;; Convenience functions
+(add-to-list 'yas-snippet-dirs
+             (expand-file-name "snippets"
+                               (file-name-directory
+                                (or load-file-name buffer-file-name)))
+             t)
+(yas-reload-all)
+;;; emacs-js.el ends here
 
 ;; web-mode
 (require 'web-mode)
 (setq web-mode-enable-auto-closing t)
 (setq web-mode-enable-auto-pairing t)
+(add-to-list 'web-mode-indentation-params '("lineup-calls" . nil))
 
 (defun my-web-mode-hook ()
   "Hooks for Web mode."
@@ -178,33 +278,34 @@ Return a list of installed packages or nil for every skipped package."
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "C-x C-d") 'helm-browse-project)
 
+
 ;; helm ag
 (setq helm-ag-use-agignore t)
 
 ;; company
-(require 'company)
-(global-company-mode 1)
-(setq company-dabbrev-downcase nil)
+;; (require 'company)
+;; (global-company-mode 1)
+;; (setq company-dabbrev-downcase nil)
 
 ;; helm - company - yasnippet
-(require 'helm-company)
+;; (require 'helm-company)
 
-(defvar company-mode/enable-yas t
-  "Enable yasnippet for all backends.")
+;; (defvar company-mode/enable-yas t
+;;   "Enable yasnippet for all backends.")
 
-(defun company-mode/backend-with-yas (backend)
-  (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
-      backend
-    (append (if (consp backend) backend (list backend))
-	    '(:with company-yasnippet))))
+;; (defun company-mode/backend-with-yas (backend)
+;;   (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
+;;       backend
+;;     (append (if (consp backend) backend (list backend))
+;; 	    '(:with company-yasnippet))))
 
-(setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
+;; (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 
-;; helm-company choose from company completions with C-:
-(eval-after-load 'company
-  '(progn
-     (define-key company-mode-map (kbd "C-:") 'helm-company)
-     (define-key company-active-map (kbd "C-:") 'helm-company)))
+;; ;; helm-company choose from company completions with C-:
+;; (eval-after-load 'company
+;;   '(progn
+;;      (define-key company-mode-map (kbd "C-:") 'helm-company)
+;;      (define-key company-active-map (kbd "C-:") 'helm-company)))
 
 ;; magit
 (setenv "EDITOR" "emacsclient")
