@@ -108,6 +108,7 @@ bindsym $mod+Shift+0 move container to workspace $workspace10
 
 # workspace assignments
 assign [class="Emacs25"] $workspace1
+assign [class="Xfce4-terminal" title="main"] $workspace1
 assign [class="Xfce4-terminal"] $workspace2
 assign [class="Firefox"] $workspace3
 assign [class="Google-chrome"] $workspace4
@@ -208,8 +209,8 @@ exec redshift -c ~/.config/redshift.conf
 exec xbindkeys
 exec xautolock -locker slock -time 5
 
-exec emacs
-exec i3-sensible-terminal
+exec xfce4-terminal --title main
+exec xfce4-terminal
 exec google-chrome
 exec firefox
 exec google-play-music-desktop-player
