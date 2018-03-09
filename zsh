@@ -1,6 +1,9 @@
 export GOPATH=$HOME/work/gopath
 export PATH=$GOPATH:$GOPATH/bin:$PATH
 export ZSH=/home/sam/.oh-my-zsh
+export ALTERNATE_EDITOR=""
+export EDITOR="emacsclient -t"
+export VISUAL="emacsclient -c -a emacs"
 
 ZSH_THEME="blennel"
 
@@ -10,6 +13,9 @@ source $ZSH/oh-my-zsh.sh
 
 alias rezsh="source ~/.zshrc"
 alias xr="xrdb ~/.Xresources"
+alias emax="emacsclient -t"                      # used to be "emacs -nw"
+alias semac="sudo emacsclient -t"                # used to be "sudo emacs -nw"
+alias emacsc="emacsclient -c -a emacs"           # new - opens the GUI with alternate non-daemon
 
 # nvm init
 export NVM_DIR="/home/sam/.nvm"
