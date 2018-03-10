@@ -80,7 +80,7 @@ set $workspace6 "6"
 set $workspace7 "7"
 set $workspace8 "8"
 set $workspace9 "9"
-set $workspace10 "10:"
+set $workspace10 "10:🎜"
 
 # switch to workspace
 bindsym $mod+1 workspace $workspace1
