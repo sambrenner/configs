@@ -4,7 +4,7 @@
 
 set $mod Mod4
 
-font pango:InputSans Light 8
+font pango:Source Sans Pro 9
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -185,6 +185,7 @@ client.urgent $base02 $base08 $base07 $base08
 bar {
     status_command i3blocks -c ~/.config/i3/i3blocks.conf
     tray_output primary
+    font pango:InputSans Light 8
 
     colors {
         separator $base03

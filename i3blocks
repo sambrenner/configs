@@ -47,7 +47,6 @@ interval=10
 # The type defaults to "mem" if the instance is not specified.
 [memory]
 label=MEM
-separator=false
 interval=30
 
 [memory]
@@ -91,9 +90,9 @@ interval=10
 [cpu_usage]
 label=CPU
 interval=10
-separator=false
 
 [load_average]
+label=LOAD
 interval=10
 
 # Battery indicator
