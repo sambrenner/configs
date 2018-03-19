@@ -42,7 +42,7 @@
    "/usr/bin/pandoc -c /home/sam/.emacs.d/github-pandoc.css --from markdown_github -t html5 --mathjax --highlight-style pygments --standalone")
  '(package-selected-packages
    (quote
-    (company-tern yaml-mode web-mode web-beautify transpose-frame smyx-theme smarty-mode smart-mode-line scss-mode powerline php-auto-yasnippets multi-term markdown-toc magit js2-mode helm-company helm-ag glsl-mode buffer-move apache-mode actionscript-mode)))
+    (xclip company-tern yaml-mode web-mode web-beautify transpose-frame smyx-theme smarty-mode smart-mode-line scss-mode powerline php-auto-yasnippets multi-term markdown-toc magit js2-mode helm-company helm-ag glsl-mode buffer-move apache-mode actionscript-mode)))
  '(safe-local-variable-values (quote ((eval setq web-mode-set-engine "ctemplate")))))
 
 ;; custom vars
@@ -80,7 +80,7 @@ Return a list of installed packages or nil for every skipped package."
 (or (file-exists-p package-user-dir)
 	(package-refresh-contents))
 
-(ensure-package-installed 'magit 'smyx-theme 'smarty-mode 'php-mode 'company 'company-tern 'markdown-mode 'markdown-toc 'apache-mode 'helm 'helm-company 'web-mode 'yasnippet 'php-auto-yasnippets 'glsl-mode 'actionscript-mode 'scss-mode 'multi-term 'smart-mode-line 'js2-mode 'helm-ag 'web-beautify 'yaml-mode 'transpose-frame 'buffer-move 'tern 'exec-path-from-shell 'amd-mode 'eslintd-fix 'flycheck 'gulp-task-runner 'indium 'js2-mode 'js2-refactor 'projectile 'xref-js2)
+(ensure-package-installed 'magit 'smyx-theme 'smarty-mode 'php-mode 'company 'company-tern 'markdown-mode 'markdown-toc 'apache-mode 'helm 'helm-company 'web-mode 'yasnippet 'php-auto-yasnippets 'glsl-mode 'actionscript-mode 'scss-mode 'multi-term 'smart-mode-line 'js2-mode 'helm-ag 'web-beautify 'yaml-mode 'transpose-frame 'buffer-move 'tern 'exec-path-from-shell 'amd-mode 'eslintd-fix 'flycheck 'gulp-task-runner 'indium 'js2-mode 'js2-refactor 'projectile 'xref-js2 'xclip)
 
 ;; path from shell
 (when (memq window-system '(mac ns x))
@@ -105,6 +105,10 @@ Return a list of installed packages or nil for every skipped package."
 (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
 (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
 (add-to-list 'auto-mode-alist '("\\.geom\\'" . glsl-mode))
+
+;; xclip
+(require 'xclip)
+(xclip-mode 1)
 
 ;;; emacs-js.el --- JS-mode setup
 ;; Copyright (C) 2016  Nicolas Petton
