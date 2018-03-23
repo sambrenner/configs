@@ -17,7 +17,7 @@
 (display-time-mode 1)
 (delete-selection-mode 1)
 
-(set-frame-font "-FBI -Input Mono-light-normal-normal-*-13-*-*-*-m-0-iso10646-1")
+;; (set-frame-font "-FBI -Input Mono-light-normal-normal-*-13-*-*-*-m-0-iso10646-1")
 
 (add-hook 'before-save-hook
           'delete-trailing-whitespace)
