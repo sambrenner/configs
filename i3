@@ -185,7 +185,7 @@ client.urgent $base02 $base08 $base07 $base08
 bar {
     status_command i3blocks -c ~/.config/i3/i3blocks.conf
     tray_output primary
-    font pango:Source Code Pro Light 9
+    font pango:Source Code Pro Regular 9
 
     colors {
         separator $base03
