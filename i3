@@ -118,11 +118,11 @@ for_window [class="Spotify"] move window to workspace $workspace10
 
 # screen assignments
 workspace $workspace1 output HDMI3
-workspace $workspace2 output HDMI2
-workspace $workspace3 output HDMI2
-workspace $workspace4 output HDMI2
-workspace $workspace5 output HDMI2
-workspace $workspace10 output HDMI2
+workspace $workspace2 output HDMI3
+workspace $workspace3 output HDMI1
+workspace $workspace4 output HDMI1
+workspace $workspace5 output HDMI1
+workspace $workspace10 output HDMI1
 
 # media keys
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
@@ -204,7 +204,7 @@ bindsym $mod+Control+4 exec shutter -s -o '/home/sam/screenshots/%y-%m-%d-%T.png
 
 # startup applications
 exec ~/.dropbox-dist/dropboxd
-exec xrandr --output HDMI3 --auto --right-of HDMI2
+exec xrandr --output HDMI3 --auto --left-of HDMI1
 exec eval `ssh-agent -s`
 exec redshift -c ~/.config/redshift.conf
 exec xbindkeys
