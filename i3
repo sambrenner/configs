@@ -108,8 +108,8 @@ bindsym $mod+Shift+0 move container to workspace $workspace10
 
 # workspace assignments
 assign [class="Emacs25"] $workspace1
-assign [class="Xfce4-terminal" title="main"] $workspace1
-assign [class="Xfce4-terminal"] $workspace2
+assign [class="konsole" title="main"] $workspace1
+assign [class="konsole"] $workspace2
 assign [class="Firefox"] $workspace3
 assign [class="Google-chrome"] $workspace4
 assign [class="robo3t"] $workspace5
@@ -204,14 +204,14 @@ bindsym $mod+Control+4 exec shutter -s -o '/home/sam/screenshots/%y-%m-%d-%T.png
 
 # startup applications
 exec ~/.dropbox-dist/dropboxd
-exec xrandr --output HDMI3 --auto --left-of HDMI1
+# exec xrandr --output HDMI3 --auto --left-of HDMI1
 exec eval `ssh-agent -s`
 exec redshift -c ~/.config/redshift.conf
 exec xbindkeys
 exec xautolock -locker slock -time 5
 
-exec xfce4-terminal --title main
-exec xfce4-terminal
+exec konsole --title main
+exec konsole
 exec google-chrome
 exec firefox
 exec google-play-music-desktop-player
