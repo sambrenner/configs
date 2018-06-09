@@ -6,3 +6,6 @@ rofi.color-window: #97bbf7, #252936, #97bbf7
 rofi.color-normal: #97bbf7, #252936, #97bbf7, #252936, #97bbf7
 rofi.color-active: #97bbf7, #ffffff, #97bbf7, #252936, #ffffff
 rofi.color-urgent: #97bbf7, #ee4975, #97bbf7, #ee4975, #ffffff
+
+! HiDPI
+Xft.dpi: 144
