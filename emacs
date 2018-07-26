@@ -224,6 +224,7 @@ unreachable."
 (setq web-mode-enable-auto-closing t)
 (setq web-mode-enable-auto-pairing t)
 (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil))
+(add-to-list 'web-mode-indentation-params '("lineup-ternary" . nil))
 
 (defun my-web-mode-hook ()
   "Hooks for Web mode."
