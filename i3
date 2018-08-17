@@ -80,7 +80,7 @@ set $workspace6 "6"
 set $workspace7 "7"
 set $workspace8 "8"
 set $workspace9 "9"
-set $workspace10 "10:🎜"
+set $workspace10 "10:♫"
 
 # switch to workspace
 bindsym $mod+1 workspace $workspace1
@@ -117,18 +117,25 @@ assign [class="Google Play Music Desktop Player"] $workspace10
 for_window [class="Spotify"] move window to workspace $workspace10
 
 # screen assignments
-workspace $workspace1 output HDMI3
-workspace $workspace2 output HDMI3
-workspace $workspace3 output HDMI1
-workspace $workspace4 output HDMI1
-workspace $workspace5 output HDMI1
-workspace $workspace10 output HDMI1
+workspace $workspace1 output HDMI2
+workspace $workspace2 output HDMI2
+workspace $workspace3 output eDP1
+workspace $workspace4 output eDP1
+workspace $workspace5 output eDP1
+workspace $workspace10 output eDP1
 
-# media keys
+# Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec xbacklight -inc 5 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 5 # decrease screen brightness
+
+# Media player controls
 bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
@@ -185,7 +192,7 @@ client.urgent $base02 $base08 $base07 $base08
 bar {
     status_command i3blocks -c ~/.config/i3/i3blocks.conf
     tray_output primary
-    font pango:Source Code Pro Regular 9
+    font pango:Input Mono Narrow 9
 
     colors {
         separator $base03
@@ -205,6 +212,7 @@ bindsym $mod+Control+4 exec shutter -s -o '/home/sam/screenshots/%y-%m-%d-%T.png
 # startup applications
 exec ~/.dropbox-dist/dropboxd
 # exec xrandr --output HDMI3 --auto --left-of HDMI1
+exec xrandr --output HDMI2 --scale 1.5x1.5 --panning 2880x1620+2560+0 --fb 5440x1620 --right-of eDP1
 exec eval `ssh-agent -s`
 exec redshift -c ~/.config/redshift.conf
 exec xbindkeys
@@ -216,3 +224,6 @@ exec google-chrome
 exec firefox
 exec google-play-music-desktop-player
 exec /opt/robo3t/bin/robo3t
+
+# tap to click
+exec xinput set-prop 12 278 1
