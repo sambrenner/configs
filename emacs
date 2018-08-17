@@ -42,7 +42,7 @@
    "/usr/bin/pandoc -c /home/sam/.emacs.d/github-pandoc.css --from markdown_github -t html5 --mathjax --highlight-style pygments --standalone")
  '(package-selected-packages
    (quote
-    (xclip company-tern yaml-mode web-mode web-beautify transpose-frame smyx-theme smarty-mode smart-mode-line scss-mode powerline php-auto-yasnippets multi-term markdown-toc magit js2-mode helm-company helm-ag glsl-mode buffer-move apache-mode actionscript-mode)))
+    (pdf-tools xclip company-tern yaml-mode web-mode web-beautify transpose-frame smyx-theme smarty-mode smart-mode-line scss-mode powerline php-auto-yasnippets multi-term markdown-toc magit js2-mode helm-company helm-ag glsl-mode buffer-move apache-mode actionscript-mode)))
  '(safe-local-variable-values (quote ((eval setq web-mode-set-engine "ctemplate")))))
 
 ;; custom vars
