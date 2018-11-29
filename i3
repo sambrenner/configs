@@ -10,7 +10,7 @@ font pango:Source Sans Pro 9
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec konsole
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -166,27 +166,22 @@ bindsym $mod+r mode "resize"
 exec_always feh --bg-scale "$(find ~/Dropbox/wallpapers/gradients/|shuf -n1)"
 
 # colors
-set $base00 #101218
-set $base01 #1f222d
-set $base02 #252936
-set $base03 #7780a1
-set $base04 #C0C5CE
-set $base05 #d1d4e0
-set $base06 #C9CCDB
-set $base07 #ffffff
-set $base08 #ee829f
-set $base09 #f99170
-set $base0A #ffefcc
-set $base0B #a5ffe1
-set $base0C #97e0ff
-set $base0D #97bbf7
-set $base0E #c0b7f9
-set $base0F #fcc09e
 
-client.focused $base0D $base0D $base00 $base01
-client.focused_inactive $base02 $base02 $base03 $base01
-client.unfocused $base01 $base01 $base03 $base01
-client.urgent $base02 $base08 $base07 $base08
+set $blk #263238
+set $red #F44336
+set $blu #00bcd4
+
+set $gr1 $e1e1e1
+set $gr2 #c8c8c8
+set $gr3 #90a4ae
+set $gr4 #455A64
+set $whi #ffffff
+
+# class                 border  bg      text    indicator
+client.focused          $whi    $whi    $blk    $blu
+client.focused_inactive $blk    $blk    $gr3    $blk
+client.unfocused        $blk    $blk    $gr3    $blk
+client.urgent           $gr2    $red    $gr1    $gr1
 
 # bar
 bar {
@@ -195,13 +190,13 @@ bar {
     font pango:Input Mono Narrow 9
 
     colors {
-        separator $base03
-        background $base01
-        statusline $base05
-        focused_workspace $base0C $base0D $base00
-        active_workspace $base02 $base02 $base07
-        inactive_workspace $base01 $base01 $base03
-        urgent_workspace $base08 $base08 $base07
+        separator $gr2
+        background $blk
+        statusline $gr2
+        focused_workspace $blk $blk $whi
+        active_workspace $blk $blk $whi
+        inactive_workspace $blk $blk $gr3
+        urgent_workspace $red $red $whi
     }
 }
 
@@ -214,7 +209,7 @@ exec ~/.dropbox-dist/dropboxd
 # exec xrandr --output HDMI3 --auto --left-of HDMI1
 exec xrandr --output HDMI2 --scale 1.5x1.5 --panning 2880x1620+2560+0 --fb 5440x1620 --right-of eDP1
 exec eval `ssh-agent -s`
-exec redshift -c ~/.config/redshift.conf
+exec redshift -l 40.730610:-73.935242
 exec xbindkeys
 exec xautolock -locker slock -time 5
 
