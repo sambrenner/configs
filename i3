@@ -178,7 +178,7 @@ set $gr4 #455A64
 set $whi #ffffff
 
 # class                 border  bg      text    indicator
-client.focused          $whi    $whi    $blk    $blu
+client.focused          $blu    $blu    $blk    $blu
 client.focused_inactive $blk    $blk    $gr3    $blk
 client.unfocused        $blk    $blk    $gr3    $blk
 client.urgent           $gr2    $red    $gr1    $gr1
