@@ -91,6 +91,7 @@ Return a list of installed packages or nil for every skipped package."
 (setq system-uses-terminfo nil
       multi-term-program "/bin/zsh")
 (add-hook 'term-mode-hook (lambda () (yas-minor-mode -1)))
+(add-hook 'term-mode-hook (lambda () (linum-mode -1)))
 
 ;; yasnippet
 (require 'yasnippet)
