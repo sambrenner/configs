@@ -228,6 +228,7 @@ unreachable."
 (require 'web-mode)
 (setq web-mode-enable-auto-closing t)
 (setq web-mode-enable-auto-pairing t)
+(setq web-mode-attr-indent-offset 4)
 (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil))
 (add-to-list 'web-mode-indentation-params '("lineup-ternary" . nil))
 
