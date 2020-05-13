@@ -1,6 +1,6 @@
 export GOPATH=$HOME/work/gopath
 export PATH=$GOPATH:$GOPATH/bin:$PATH
-export ZSH=/Users/sbrenner1/.oh-my-zsh
+export ZSH=/home/sam/.oh-my-zsh
 export ALTERNATE_EDITOR=""
 export EDITOR="emacsclient -t"
 export VISUAL="emacsclient -c -a emacs"
