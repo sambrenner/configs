@@ -189,10 +189,17 @@
   :ensure t)
 
 ;; helm
+(require 'helm-config)
+
 (use-package helm
+  :config
+  (helm-mode 1)
   :bind (("M-x" . helm-M-x)
+         ("M-y" . helm-show-kill-ring)
+         ("C-s" . helm-occur)
          ("C-x C-f" . helm-find-files)
-         ("C-x C-d" . helm-browse-project))
+         ("C-x C-d" . helm-browse-project)
+         ("C-x b" . helm-mini))
   :ensure t)
 
 ;; helm company
@@ -293,12 +300,31 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(add-to-list (quote web-mode-indentation-params) t)
+ '(company-idle-delay 0.1 t)
+ '(helm-ag-use-agignore t t)
  '(helm-completion-style (quote emacs))
- '(js-indent-level 2)
+ '(js-indent-level 2 t)
  '(js2-basic-offset 2)
+ '(linum-format "%4d  ")
+ '(magit-auto-revert-mode nil)
+ '(magit-last-seen-setup-instructions "1.4.0" t)
+ '(multi-term-program "/bin/zsh")
+ '(package-selected-packages
+   (quote
+    (helm-mode yaml-mode xref-js2 winum web-mode web-beautify use-package transpose-frame tide stylus-mode smart-mode-line scss-mode rjsx-mode php-auto-yasnippets pbcopy multi-term markdown-toc magit julia-mode indium helm-company helm-ag gulp-task-runner glsl-mode fira-code-mode exec-path-from-shell eslintd-fix emojify dumb-jump doom-themes doom-modeline company-tern buffer-move apache-mode amd-mode)))
  '(safe-local-variable-values (quote ((eval setq web-mode-set-engine "ctemplate"))))
  '(system-uses-terminfo nil t)
- '(visible-bell nil))
+ '(tide-tsserver-executable "/home/sam/.nvm/versions/node/v12.16.1/bin/tsserver" t)
+ '(visible-bell nil)
+ '(web-mode-attr-indent-offset 2)
+ '(web-mode-code-indent-offset 2)
+ '(web-mode-content-types-alist (quote (("jsx" . "\\.js[x]?\\'"))) t)
+ '(web-mode-enable-auto-closing t)
+ '(web-mode-enable-auto-pairing t)
+ '(web-mode-enable-auto-quoting nil)
+ '(web-mode-markup-indent-offset 2)
+ '(web-mode-script-padding 2)
+ '(web-mode-style-padding 2))
 
 ;; custom vars
 (custom-set-faces
