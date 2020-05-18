@@ -23,7 +23,7 @@
 ;; font
 (set-face-attribute 'default nil
                     :family "FiraCode"
-                    :height 100
+                    :height 110
                     :weight 'light
                     :width 'normal)
 
