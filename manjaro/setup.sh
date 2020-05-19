@@ -29,8 +29,8 @@ yay -s polybar-git
 python i3wm-themer.py --config config.yaml --load themes/010.json
 
 # applications
-yay -S xbindkeys google-chrome dropbox drive-bin
-sudo pacman -S emacs xorg-xmodmap otf-fira-code clementine firefox xfce4-terminal keepassxc xclip
+yay -S xbindkeys google-chrome dropbox drive-bin brave-bin pepper-flash
+sudo pacman -S emacs xorg-xmodmap otf-fira-code clementine firefox xfce4-terminal keepassxc xclip feh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # node
