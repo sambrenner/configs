@@ -9,9 +9,16 @@
 (package-refresh-contents)
 
 ;; use-package setup
-(eval-when-compile
-  (add-to-list 'load-path "/home/sam/.emacs.d/elpa/use-package-20200322.2110/use-package.el")
-  (require 'use-package))
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(require 'use-package)
+
+(setq use-package-always-defer t
+      use-package-always-ensure t
+      backup-directory-alist `((".*" . ,temporary-file-directory))
+      auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
 ;; load paths
 (add-to-list 'load-path "~/.emacs.d/nonelpa/")
@@ -22,8 +29,8 @@
 
 ;; font
 (set-face-attribute 'default nil
-                    :family "FiraCode"
-                    :height 110
+                    :family "Fira Code"
+                    :height 180
                     :weight 'light
                     :width 'normal)
 
@@ -33,7 +40,7 @@
       (tool-bar-mode -1)
       (scroll-bar-mode -1)))
 
-(menu-bar-mode -1)
+(menu-bar-mode t)
 (line-number-mode -1)
 (display-time-mode 1)
 (delete-selection-mode 1)
@@ -51,24 +58,25 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; code formatting
-(setq-default js-indent-level 2
-              sgml-basic-offset 2
-              nxml-child-indent 2
-              indent-tabs-mode nil
-              tab-width 2)
-
-(defvaralias 'c-basic-offset 'tab-width)
+(setq js-indent-level 2
+      sgml-basic-offset 2
+      nxml-child-indent 2
+      indent-tabs-mode nil
+      tab-width 2
+      c-basic-offset 2)
 
 ;; custom shortcuts
 (define-key global-map (kbd "RET") 'newline-and-indent)
 (define-key global-map (kbd "C-c C-s") 'helm-do-ag)
 
 ;; path from shell
+(defun my-exec-path-from-shell-initialize ()
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
 (use-package exec-path-from-shell
-  :if (memq window-system '(mac ns x))
-  :ensure t
-  :config
-  (exec-path-from-shell-initialize))
+  :init
+  (add-hook 'after-init-hook 'my-exec-path-from-shell-initialize))
 
 ;; mac clipboard
 (when (memq window-system '(mac ns))
@@ -89,26 +97,27 @@
   :custom
   (system-uses-terminfo nil)
   (multi-term-program "/bin/zsh")
-  :ensure t
   :init
-  (add-hook 'term-mode-hook (lambda () (yas-minor-mode -1)))
   (add-hook 'term-mode-hook (lambda () (linum-mode -1))))
+
+;; docker tramp
+(use-package docker-tramp)
+
+;; yaml
+(use-package yaml-mode)
 
 ;; dumb jump
 (use-package dumb-jump
-  :ensure t
   :bind ("C-M-d" . dumb-jump-go))
 
 ;; winum
-(use-package winum
-  :ensure t)
+(use-package winum)
 
 ;; scss-mode
 (use-package scss-mode
   :mode "\\.styl\\'"
   :config
-  (css-indent-offset 2)
-  :ensure t)
+  (css-indent-offset 2))
 
 ;; company mode
 (use-package company
@@ -117,26 +126,26 @@
   :hook
   (after-init . global-company-mode)
   :bind (:map company-mode-map
-              ([remap indent-for-tab-command] . company-indent-or-complete-common))
-  :ensure t)
+              ([remap indent-for-tab-command] . company-indent-or-complete-common)))
 
 ;; flycheck
 (use-package flycheck
+  :init (global-flycheck-mode)
+
   :config
   (flycheck-add-mode 'javascript-eslint 'web-mode)
-  :init
-  (add-hook 'after-init-hook #'global-flycheck-mode)
 
   ;; flycheck -> eslint_d
-  (if (executable-find "eslint_d")
-      (setq flycheck-javascript-eslint-executable "eslint_d")
-    (warn "emacs cannot find eslint_d. maybe you need to sudo npm install -g eslint_d"))
+  (setq flycheck-javascript-eslint-executable "eslint_d"))
 
-  ;; flycheck -> rust
-  (with-eval-after-load 'rust-mode
-    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+  ;;(if (executable-find "eslint_d")
+  ;;(warn "emacs cannot find eslint_d. maybe you need to sudo npm install -g eslint_d")))
 
-  :ensure t)
+;; graphql
+(use-package graphql-mode)
+
+;; grpc
+(use-package protobuf-mode)
 
 ;; web-mode
 (use-package web-mode
@@ -147,28 +156,31 @@
   (web-mode-enable-auto-pairing t)
   (web-mode-attr-indent-offset 2)
   (web-mode-code-indent-offset 2)
+  (web-mode-css-indent-offset 2)
   (web-mode-markup-indent-offset 2)
   (web-mode-enable-auto-quoting nil)
-  (web-mode-content-types-alist '(("jsx"  . "\\.js[x]?\\'")))
+  (web-mode-content-types-alist '(("jsx"  . "\\.[jt]s[x]?\\'")))
   (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil))
   (add-to-list 'web-mode-indentation-params '("lineup-ternary" . nil))
 
   :init
-  (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode ))
   (add-to-list 'auto-mode-alist '("\\.ejs\\'" . web-mode ))
+  (add-to-list 'auto-mode-alist '("\\.twig\\'" . web-mode ))
   (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode ))
   (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode ))
   (add-to-list 'auto-mode-alist '("\\.tag\\'" . web-mode ))
   (add-to-list 'auto-mode-alist '("\\.riot\\'" . web-mode ))
-  (add-to-list 'auto-mode-alist '("\\.js[x]?\\'" . web-mode ))
+  (add-to-list 'auto-mode-alist '("\\.[jt]s[x]?\\'" . web-mode ))
+
   (defadvice web-mode-highlight-part (around tweat-jsx activate)
     (if (equal web-mode-content-type "jsx")
         (let ((web-mode-enable-part-face nil))
           ad-do-it)
-      ad-do-it))
+      ad-do-it)))
 
-  :ensure t
-)
+;; prettier-js
+(use-package prettier-js
+  :hook (web-mode . prettier-js-mode))
 
 ;; tide
 (defun init-tide-mode ()
@@ -180,13 +192,62 @@
     (setq flycheck-check-syntax-automatically '(save mode-enabled))
     (eldoc-mode +1)
     (tide-hl-identifier-mode +1)
-    (company-mode +1)))
+    (company-mode +1)
+    (flycheck-add-next-checker 'tsx-tide 'javascript-eslint 'append)))
 
 (use-package tide
   :hook (web-mode . init-tide-mode)
   :custom
-  (tide-tsserver-executable "/home/sam/.nvm/versions/node/v12.16.1/bin/tsserver")
-  :ensure t)
+  ;; (tide-tsserver-executable "/home/sam/.nvm/versions/node/v12.17.0/bin/tsserver")
+  (tide-tsserver-executable nil))
+
+;; php
+(use-package php-mode
+  :config
+  (setq c-basic-offset 4)
+  (setq tab-width 4)
+  (setq php-mode-coding-style 'psr2))
+
+;; scala / sbt
+;; Enable scala-mode for highlighting, indentation and motion commands
+(use-package scala-mode
+  :mode "\\.s\\(cala\\|bt\\)$")
+
+;; java path
+(setenv "JAVA_HOME"
+        "/Users/sbrenner/.jenv/shims")
+
+;; Enable sbt mode for executing sbt commands
+(use-package sbt-mode
+  :commands sbt-start sbt-command
+  :config
+  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map)
+   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+   (setq sbt:program-options '("-Dsbt.supershell=false"))
+   )
+
+(use-package lsp-mode
+  ;; Optional - enable lsp-mode automatically in scala files
+  :hook  (scala-mode . lsp)
+  (lsp-mode . lsp-lens-mode)
+  :config
+  (setq lsp-prefer-flymake nil)
+  (setq lsp-enable-snippet nil))
+
+(use-package lsp-metals)
+(use-package lsp-ui
+  :init (setq lsp-ui-sideline-enable nil))
+(use-package posframe)
+(use-package dap-mode
+  :hook
+  (lsp-mode . dap-mode)
+  (lsp-mode . dap-ui-mode)
+  )
 
 ;; helm
 (require 'helm-config)
@@ -199,8 +260,7 @@
          ("C-s" . helm-occur)
          ("C-x C-f" . helm-find-files)
          ("C-x C-d" . helm-browse-project)
-         ("C-x b" . helm-mini))
-  :ensure t)
+         ("C-x b" . helm-mini)))
 
 ;; helm company
 (eval-after-load 'company
@@ -212,8 +272,7 @@
 (use-package helm-ag
   :bind (("M-r" . helm-do-ag-project-root))
   :custom
-  (helm-ag-use-agignore t)
-  :ensure t)
+  (helm-ag-use-agignore t))
 
 ;; magit
 (use-package magit
@@ -222,28 +281,27 @@
   (magit-last-seen-setup-instructions "1.4.0")
   :bind (("C-x g" . magit-status))
   :init
-  (setenv "EDITOR" "emacsclient")
-  :ensure t)
+  (setenv "EDITOR" "emacsclient"))
 
 ;; whitespace
-(use-package whitespace
-  :ensure t)
+(use-package whitespace)
 
 ;; linum
 (use-package linum
   :init
   (global-linum-mode 1)
   :custom
-  (linum-format "%4d  ")
-  :ensure t)
+  (linum-format "%4d  "))
 
 ;; doom
 (use-package doom-themes
+  :init
+  (load-theme 'doom-spacegrey t)
+
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-spacegrey t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -256,7 +314,6 @@
 
 ;; doom modeline
 (use-package doom-modeline
-      :ensure t
       :hook (after-init . doom-modeline-mode)
       :custom
       (doom-modeline-major-mode-icon nil)
@@ -300,7 +357,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(add-to-list (quote web-mode-indentation-params) t)
- '(company-idle-delay 0.1 t)
+ '(company-idle-delay 0.1)
  '(helm-ag-use-agignore t t)
  '(helm-completion-style (quote emacs))
  '(js-indent-level 2 t)
@@ -311,20 +368,21 @@
  '(multi-term-program "/bin/zsh")
  '(package-selected-packages
    (quote
-    (helm-mode yaml-mode xref-js2 winum web-mode web-beautify use-package transpose-frame tide stylus-mode smart-mode-line scss-mode rjsx-mode php-auto-yasnippets pbcopy multi-term markdown-toc magit julia-mode indium helm-company helm-ag gulp-task-runner glsl-mode fira-code-mode exec-path-from-shell eslintd-fix emojify dumb-jump doom-themes doom-modeline company-tern buffer-move apache-mode amd-mode)))
+    (docker-tramp sbt-mode scala-mode prettier-js company graphql-mode protobuf-mode helm-mode yaml-mode xref-js2 winum web-mode web-beautify use-package transpose-frame tide stylus-mode smart-mode-line scss-mode rjsx-mode php-auto-yasnippets pbcopy multi-term markdown-toc magit julia-mode indium helm-company helm-ag gulp-task-runner glsl-mode fira-code-mode exec-path-from-shell eslintd-fix emojify dumb-jump doom-themes doom-modeline company-tern buffer-move apache-mode amd-mode)))
  '(safe-local-variable-values (quote ((eval setq web-mode-set-engine "ctemplate"))))
  '(system-uses-terminfo nil t)
- '(tide-tsserver-executable "/home/sam/.nvm/versions/node/v12.16.1/bin/tsserver" t)
+ '(tide-tsserver-executable nil t)
  '(visible-bell nil)
- '(web-mode-attr-indent-offset 2)
- '(web-mode-code-indent-offset 2)
+ '(web-mode-attr-indent-offset 2 t)
+ '(web-mode-code-indent-offset 2 t)
  '(web-mode-content-types-alist (quote (("jsx" . "\\.js[x]?\\'"))) t)
- '(web-mode-enable-auto-closing t)
- '(web-mode-enable-auto-pairing t)
- '(web-mode-enable-auto-quoting nil)
- '(web-mode-markup-indent-offset 2)
- '(web-mode-script-padding 2)
- '(web-mode-style-padding 2))
+ '(web-mode-css-indent-offset 2 t)
+ '(web-mode-enable-auto-closing t t)
+ '(web-mode-enable-auto-pairing t t)
+ '(web-mode-enable-auto-quoting nil t)
+ '(web-mode-markup-indent-offset 2 t)
+ '(web-mode-script-padding 2 t)
+ '(web-mode-style-padding 2 t))
 
 ;; custom vars
 (custom-set-faces
