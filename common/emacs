@@ -209,6 +209,11 @@
   (setq tab-width 4)
   (setq php-mode-coding-style 'psr2))
 
+;; python
+(use-package elpy
+  :init
+  (elpy-enable))
+
 ;; scala / sbt
 ;; Enable scala-mode for highlighting, indentation and motion commands
 (use-package scala-mode
