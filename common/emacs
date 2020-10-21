@@ -51,6 +51,7 @@
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
 (setq next-line-add-newlines t)
 
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'after-init-hook #'global-emojify-mode)
 (add-hook 'before-save-hook
           'delete-trailing-whitespace)
@@ -285,13 +286,6 @@
 
 ;; whitespace
 (use-package whitespace)
-
-;; linum
-(use-package linum
-  :init
-  (global-linum-mode 1)
-  :custom
-  (linum-format "%4d  "))
 
 ;; doom
 (use-package doom-themes
