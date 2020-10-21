@@ -93,13 +93,6 @@
   (setq interprogram-cut-function 'paste-to-osx)
   (setq interprogram-paste-function 'copy-from-osx))
 
-;; shell
-(use-package multi-term
-  :custom
-  (system-uses-terminfo nil)
-  (multi-term-program "/bin/zsh")
-  :init
-  (add-hook 'term-mode-hook (lambda () (linum-mode -1))))
 
 ;; docker tramp
 (use-package docker-tramp)
@@ -318,6 +311,10 @@
       (doom-modeline-major-mode-icon nil)
       (doom-modeline-project-detection 'project)
       (doom-modeline-project-detection 'ffip))
+
+;;term
+(use-package vterm)
+(use-package multi-vterm)
 
 ;; custom fns
 (defun insert-datetime nil
