@@ -93,6 +93,11 @@
   (setq interprogram-cut-function 'paste-to-osx)
   (setq interprogram-paste-function 'copy-from-osx))
 
+;; org-roam
+(use-package org-roam
+  :init (add-hook 'after-init-hook 'org-roam-mode)
+  :custom (org-roam-directory "~/work/notes")
+  :bind ("C-c i" . org-roam-insert))
 
 ;; docker tramp
 (use-package docker-tramp)
@@ -364,7 +369,7 @@
  '(multi-term-program "/bin/zsh")
  '(package-selected-packages
    (quote
-    (docker-tramp sbt-mode scala-mode prettier-js company graphql-mode protobuf-mode helm-mode yaml-mode xref-js2 winum web-mode web-beautify use-package transpose-frame tide stylus-mode smart-mode-line scss-mode rjsx-mode php-auto-yasnippets pbcopy multi-term markdown-toc magit julia-mode indium helm-company helm-ag gulp-task-runner glsl-mode fira-code-mode exec-path-from-shell eslintd-fix emojify dumb-jump doom-themes doom-modeline company-tern buffer-move apache-mode amd-mode)))
+    (multi-vterm org-roam docker-tramp sbt-mode scala-mode prettier-js company graphql-mode protobuf-mode helm-mode yaml-mode xref-js2 winum web-mode web-beautify use-package transpose-frame tide stylus-mode smart-mode-line scss-mode rjsx-mode php-auto-yasnippets pbcopy markdown-toc magit julia-mode indium helm-company helm-ag gulp-task-runner glsl-mode fira-code-mode exec-path-from-shell eslintd-fix emojify dumb-jump doom-themes doom-modeline company-tern buffer-move apache-mode amd-mode)))
  '(safe-local-variable-values (quote ((eval setq web-mode-set-engine "ctemplate"))))
  '(system-uses-terminfo nil t)
  '(tide-tsserver-executable nil t)
