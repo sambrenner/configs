@@ -58,6 +58,17 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+;; mac gui things
+(global-set-key [(hyper a)] 'mark-whole-buffer)
+(global-set-key [(hyper v)] 'yank)
+(global-set-key [(hyper c)] 'kill-ring-save)
+(global-set-key [(hyper s)] 'save-buffer)
+(global-set-key [(hyper l)] 'goto-line)
+(global-set-key [(hyper w)]
+                (lambda () (interactive) (delete-window)))
+(global-set-key [(hyper z)] 'undo)
+(setq mac-option-modifier 'meta)
+
 ;; code formatting
 (setq js-indent-level 2
       sgml-basic-offset 2
@@ -128,17 +139,22 @@
               ([remap indent-for-tab-command] . company-indent-or-complete-common)))
 
 ;; flycheck
+(defun my/set-local-eslint ()
+  "Use local node_modules."
+  (add-node-modules-path)
+  (setq-local flycheck-javascript-eslint-executable (executable-find "eslint")))
+
 (use-package flycheck
-  :init (global-flycheck-mode)
-
+  :ensure t
+  :hook (web-mode . my/set-local-eslint)
+  :init
+  (setq flycheck-python-flake8-executable (executable-find "flake8"))
+  (setq flycheck-python-pycompile-executable (executable-find "python3"))
   :config
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
+  (setq flycheck-check-syntax-automatically '(mode-enabled save))
+  (global-flycheck-mode 1))
 
-  ;; flycheck -> eslint_d
-  (setq flycheck-javascript-eslint-executable "eslint_d"))
-
-  ;;(if (executable-find "eslint_d")
-  ;;(warn "emacs cannot find eslint_d. maybe you need to sudo npm install -g eslint_d")))
+(use-package add-node-modules-path)
 
 ;; graphql
 (use-package graphql-mode)
@@ -192,6 +208,12 @@
     (eldoc-mode +1)
     (tide-hl-identifier-mode +1)
     (company-mode +1)
+
+    ;; enable tide linting in web-mode with ts files
+    (flycheck-add-mode 'typescript-tide 'web-mode)
+    (flycheck-add-next-checker 'typescript-tide 'javascript-eslint 'append)
+
+    ;; eslint in tsx
     (flycheck-add-next-checker 'tsx-tide 'javascript-eslint 'append)))
 
 (use-package tide
@@ -357,10 +379,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(add-to-list (quote web-mode-indentation-params) t)
+ '(add-to-list 'web-mode-indentation-params t)
  '(company-idle-delay 0.1)
  '(helm-ag-use-agignore t t)
- '(helm-completion-style (quote emacs))
+ '(helm-completion-style 'emacs)
  '(js-indent-level 2 t)
  '(js2-basic-offset 2)
  '(linum-format "%4d  ")
@@ -368,15 +390,14 @@
  '(magit-last-seen-setup-instructions "1.4.0" t)
  '(multi-term-program "/bin/zsh")
  '(package-selected-packages
-   (quote
-    (multi-vterm org-roam docker-tramp sbt-mode scala-mode prettier-js company graphql-mode protobuf-mode helm-mode yaml-mode xref-js2 winum web-mode web-beautify use-package transpose-frame tide stylus-mode smart-mode-line scss-mode rjsx-mode php-auto-yasnippets pbcopy markdown-toc magit julia-mode indium helm-company helm-ag gulp-task-runner glsl-mode fira-code-mode exec-path-from-shell eslintd-fix emojify dumb-jump doom-themes doom-modeline company-tern buffer-move apache-mode amd-mode)))
- '(safe-local-variable-values (quote ((eval setq web-mode-set-engine "ctemplate"))))
+   '(multi-vterm org-roam docker-tramp sbt-mode scala-mode prettier-js company graphql-mode protobuf-mode helm-mode yaml-mode xref-js2 winum web-mode web-beautify use-package transpose-frame tide stylus-mode smart-mode-line scss-mode rjsx-mode php-auto-yasnippets pbcopy markdown-toc magit julia-mode indium helm-company helm-ag gulp-task-runner glsl-mode fira-code-mode exec-path-from-shell eslintd-fix emojify dumb-jump doom-themes doom-modeline company-tern buffer-move apache-mode amd-mode))
+ '(safe-local-variable-values '((eval setq web-mode-set-engine "ctemplate")))
  '(system-uses-terminfo nil t)
  '(tide-tsserver-executable nil t)
  '(visible-bell nil)
  '(web-mode-attr-indent-offset 2 t)
  '(web-mode-code-indent-offset 2 t)
- '(web-mode-content-types-alist (quote (("jsx" . "\\.js[x]?\\'"))) t)
+ '(web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")) t)
  '(web-mode-css-indent-offset 2 t)
  '(web-mode-enable-auto-closing t t)
  '(web-mode-enable-auto-pairing t t)
