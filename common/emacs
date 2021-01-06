@@ -104,11 +104,44 @@
   (setq interprogram-cut-function 'paste-to-osx)
   (setq interprogram-paste-function 'copy-from-osx))
 
-;; org-roam
+;; org and org-roam
 (use-package org-roam
   :init (add-hook 'after-init-hook 'org-roam-mode)
   :custom (org-roam-directory "~/work/notes")
   :bind ("C-c i" . org-roam-insert))
+
+(use-package org-bullets
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+(setq org-startup-indented t
+      ;; org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
+      org-ellipsis "  " ;; folding symbol
+      org-pretty-entities t
+      org-hide-emphasis-markers t ;; display formatting and hide special chars
+      org-agenda-block-separator ""
+      org-fontify-whole-heading-line t
+      org-fontify-done-headline t
+      org-fontify-quote-and-verse-blocks t)
+
+(add-hook 'org-mode-hook
+            '(lambda ()
+               (variable-pitch-mode 1)
+               ))
+
+(add-hook 'org-mode-hook #'(lambda ()
+			     (variable-pitch-mode)
+                             (visual-line-mode)
+                             (org-indent-mode)
+			     (mapc
+			      (lambda (face)
+				(set-face-attribute face nil :inherit 'fixed-pitch))
+			      (list 'org-code 'org-link 'org-block 'org-table 'org-property-value 'org-formula
+				    'org-tag 'org-verbatim 'org-date 'company-tooltip
+				    'org-special-keyword 'org-block-begin-line
+				    'org-block-end-line 'org-meta-line
+				    'org-document-info-keyword))
+			     ))
 
 ;; docker tramp
 (use-package docker-tramp)
@@ -412,4 +445,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(doom-visual-bell ((t (:background "#ff6c6b")))))
+ '(doom-visual-bell ((t (:background "#ff6c6b"))))
+ '(fixed-pitch ((t (:height 1.0 :family "Fira Code"))))
+ '(org-hide ((t (:foreground "#2b303b" :family "Fira Code"))))
+ '(variable-pitch ((t (:weight normal :height 1.0 :width normal :family "Fira Sans")))))
